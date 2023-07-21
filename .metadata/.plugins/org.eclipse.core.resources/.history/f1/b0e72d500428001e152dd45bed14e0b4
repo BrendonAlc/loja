@@ -1,0 +1,13 @@
+package br.com.brendonAlc.loja.teste;
+
+import br.com.brendonAlc.loja.modelo.Produto;
+
+public class CadastroDeProduto {
+
+	public static void main(String[] args) {
+		Produto celular = new Produto();
+		celular.setNome("Xiomi Redmi");
+		celular.setDescricao("Muito bom!");
+		celular.setPreco("800");
+	}
+}

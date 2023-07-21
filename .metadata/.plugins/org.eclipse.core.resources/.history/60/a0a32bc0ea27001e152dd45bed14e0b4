@@ -1,0 +1,5 @@
+package br.com.brendonAlc.loja.modelo;
+
+public class Produto {
+
+}

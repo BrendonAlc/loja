@@ -6,21 +6,27 @@ import javax.persistence.Persistence;
 
 import com.ibm.icu.math.BigDecimal;
 
+import br.com.brendonAlc.loja.ProdutoDao;
+import br.com.brendonAlc.loja.modelo.Categoria;
 import br.com.brendonAlc.loja.modelo.Produto;
+import br.com.brendonAlc.util.JPAUtil;
 
 public class CadastroDeProduto {
 
 	public static void main(String[] args) {
 		
-		Produto celular = new Produto();
+		Produto celular = new Produto("Xiomi Redmi", "Produto muito legal.", new BigDecimal("800"), Categoria.CELULARES);
 		
-		celular.setNome("Xiomi Redmi");
-		celular.setDescricao("Muito bom!");
-		celular.setPreco(new BigDecimal("800"));
+		//Instanciar criação do entityManager
+		EntityManager em = JPAUtil.getEntityManager();
 		
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("loja");
-		EntityManager em = factory.createEntityManager();
-		em.persist(celular);
+		
+		ProdutoDao dao = new ProdutoDao(em);
+		
+		em.getTransaction().begin(); //Iniciando transação
+		dao.cadastrar(celular);
+		em.getTransaction().commit();//Finalizando transação
+		em.close();
 
 	}
 }

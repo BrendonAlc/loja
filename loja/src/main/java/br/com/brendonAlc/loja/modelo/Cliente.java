@@ -1,5 +1,6 @@
 package br.com.brendonAlc.loja.modelo;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,15 +16,15 @@ public class Cliente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String nome;
-	private String cpf;
 
-	public Cliente() {
-	}
+	@Embedded /* Embutando os atributos da classe DadosPessoais */
+	private DadosPessoais dadosPessoais;
 
 	public Cliente(String nome, String cpf) {
-		this.nome = nome;
-		this.cpf = cpf;
+		this.dadosPessoais = new DadosPessoais(nome, cpf);
+	}
+
+	public Cliente() {
 	}
 
 	public Long getId() {
@@ -34,20 +35,7 @@ public class Cliente {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public DadosPessoais getDadosPessoais() {
+		return dadosPessoais;
 	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
 }

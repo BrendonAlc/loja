@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,15 +30,16 @@ public class Pedido {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(name = "valor_total")
-	private Double valorTotal;
+	private Double valorTotal = 0.0;
 	private LocalDate dataCadastro = LocalDate.now();
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY) /*Padrao Eager, sempre colocar como lazy para carregar somente se fizer o acesso*/
 	private Cliente cliente;
 
 	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL) // Relacionando com a entidade ItemPedido um para muitos e indicando para o JPA
-									// que existe um redirecionamento bidirecional, com tipo cascata.
+									// que existe um redirecionamento bidirecional, com tipo cascata, padrao lazy (carregamento tardio).
 	private java.util.List<ItemPedido> item = new ArrayList<>();
+
 
 	public Pedido() { // Constructor default de exigência do JPA
 	}
@@ -49,6 +51,15 @@ public class Pedido {
 	public void adicionarItem(ItemPedido item) {
 		item.setPedido(this); // utilizando cast para acessar o item da lista que foi pedido
 		this.item.add(item); // utilizando cast para adicionar o item da lista
+		this.valorTotal = item.getValor();
+	}
+
+	public java.util.List<ItemPedido> getItem() {
+		return item;
+	}
+	
+	public void setItem(java.util.List<ItemPedido> item) {
+		this.item = item;
 	}
 
 	public Long getId() {

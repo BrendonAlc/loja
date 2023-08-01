@@ -9,16 +9,18 @@ import org.hibernate.mapping.List;
 import com.ibm.icu.math.BigDecimal;
 
 import br.com.brendonAlc.loja.CategoriaDao;
+import br.com.brendonAlc.loja.PedidoDao;
 import br.com.brendonAlc.loja.ProdutoDao;
 import br.com.brendonAlc.loja.modelo.Categoria;
+import br.com.brendonAlc.loja.modelo.CategoriaId;
 import br.com.brendonAlc.loja.modelo.Produto;
 import br.com.brendonAlc.util.JPAUtil;
 
 public class CadastroDeProduto {
 
 	public static void main(String[] args) {
-		
-		cadastrarProdutos();
+
+		popularBancoDeDados();
 		EntityManager em = JPAUtil.getEntityManager();
 		ProdutoDao produtoDao = new ProdutoDao(em);
 
@@ -27,32 +29,33 @@ public class CadastroDeProduto {
 
 		java.util.List<Produto> todos = produtoDao.buscarTodos();
 		todos.forEach(p2 -> System.out.println(p.getNome()));
-		
+
 		Double precoDoProduto = produtoDao.buscarPrecoDoProdutoComNome("Xiomi Redmi");
 		System.out.println("Preco do produto" + precoDoProduto);
-		
-		
+
 	}
 
-	private static void cadastrarProdutos() {
+	private static void popularBancoDeDados() {
 		Categoria celulares = new Categoria("CELULARES");
-		
+
 		Produto celular = new Produto("Xiomi Redmi", "Produto muito legal.", new Double("800.0"), celulares);
-		
-		//Instanciar criação do entityManager
+
+		// Instanciar criação do entityManager
 		EntityManager em = JPAUtil.getEntityManager();
-		
-		
+
 		ProdutoDao produtoDao = new ProdutoDao(em);
 		CategoriaDao categoriaDao = new CategoriaDao(em);
-		
-		em.getTransaction().begin(); //Iniciando transação
-		
+
+		em.getTransaction().begin(); // Iniciando transação
+
 		categoriaDao.cadastrar(celulares);
 		produtoDao.cadastrar(celular);
-		
-		
-		em.getTransaction().commit();//Finalizando transação
+
+		em.getTransaction().commit();// Finalizando transação
+
+		em.find(Categoria.class, new CategoriaId("CELULARES", "xpto"));// informar a classe que representa a chave
+																		// primaria e a classe que apresenta as chaves
+																		// compostas
 		em.close();
 	}
 }

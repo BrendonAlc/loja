@@ -1,6 +1,7 @@
 package br.com.brendonAlc.loja.modelo;
 
 import javax.annotation.processing.Generated;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,27 +11,19 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "categorias")
 public class Categoria {
-	
-	public Categoria() { //Constructor default de exigência do JPA
+
+	@EmbeddedId /*Mepeando da classe CategoriaId*/
+	protected CategoriaId id;
+
+	public Categoria() { // Constructor default de exigência do JPA
 	}
 
 	public Categoria(String nome) {
-		super();
-		this.nome = nome;
+		this.id = new CategoriaId(nome, "xpto");
 	}
-	
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private String nome;
-	
-	
 	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
+		return this.getNome();
 	}
 
 }
